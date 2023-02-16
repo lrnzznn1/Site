@@ -1,0 +1,22 @@
+{
+  "name": "universe",
+  "version": "1.0.0",
+  "description": "is project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "PeterLow",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "json": "^11.0.0",
+    "mongoose": "^6.9.1",
+    "mongoose-express-api": "^0.0.3",
+    "nodemailer": "^6.9.1",
+    "routes": "^2.1.0",
+    "swagger-ui-express": "^4.6.0"
+  }
+}

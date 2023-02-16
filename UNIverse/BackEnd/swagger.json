@@ -1,0 +1,575 @@
+{
+    "swagger": "2.0",
+        "info": {
+        "version": "1.0.0",
+        "title": "My User Project CRUD",
+        "description": "My User Project Application API",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+        },
+        "language": "it-it",
+        "host": "localhost:3000",
+        "basePath": "/",
+    "tags": [
+      {
+        "name": "Users",
+        "description": "API per gli utenti del sistema"
+      }
+    ,
+     { 
+        "name" : "Universita",
+        "description" : "API per le universita del sistema"
+     }
+     ,
+    {
+        "name" : "Chat",
+        "description" : "API per le chat del sistema"
+    }
+    ],
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+    "paths": {
+        "/user/register": {
+            "post": {
+                "tags": [
+                    "Utenti"
+                ],
+                "summary": "Aggiungi un utente al sistema",
+                "parameters": [
+                    {
+                        "name": "Nuovo utente",
+                        "in": "body",
+                        "required": "true",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Name" : {
+                                    "$ref" : "#/definitions/Utente/properties/Name"
+                                },
+                                "Surname" : {
+                                    "$ref" : "#/definitions/Utente/properties/Surname"
+                                },
+                                "email": {
+                                    "$ref": "#/definitions/Utente/properties/email"
+                                },
+                                "password": {
+                                    "$ref": "#/definitions/Utente/properties/password"
+                                },
+                                "ConfermaPassword": {
+                                    "$ref": "#/definitions/Utente/properties/password"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Utente registrato",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Name": {
+                                    "$ref": "#/definitions/Utente/properties/Name"
+                                },
+                                "Surname": {
+                                    "$ref": "#/definitions/Utente/properties/Surname"
+                                },
+                                "email": {
+                                    "$ref": "#/definitions/Utente/properties/email"
+                                },
+                                
+                                "Is_tutor": {
+                                    "$ref": "#/definitions/Utente/properties/Is_tutor"
+                                },
+                                "universita_seguite": {
+                                    "$ref": "#/definitions/Utente/properties/universita_seguite"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Richiesta non valida"
+                    },
+                    "409.1": {
+                        "description": "Utente già registrato"
+                    },
+                    "409": {
+                        "description": "Le due password non coincidono"
+                    }
+                }
+            }
+        },
+        "/api/auth/accesso": {
+            "post": {
+                "tags": [
+                    "Utenti"
+                ],
+                "summary": "Effettua l'accesso al sistema",
+                "parameters": [
+                    {
+                        "name": "Utente registrato",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "email": {
+                                    "$ref": "#/definitions/Utente/properties/email"
+                                },
+                                "password": {
+                                    "$ref": "#/definitions/Utente/properties/password"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Accesso eseguito",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "idUtente": {
+                                    "$ref": "#/definitions/Utente/properties/id"
+                                },
+                                "email": {
+                                    "$ref": "#/definitions/Utente/properties/email"
+                                },
+                                
+                                "tipoAccount": {
+                                    "$ref": "#/definitions/Utente/properties/tipoAccount"
+                                },
+                                "tokenUtente": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Accesso negato"
+                    },
+                    "404": {
+                        "description": "Utente non trovato"
+                    }
+                }
+            }
+        },
+        "/api/eliminaAccount": {
+            "delete": {
+                "tags": [
+                    "Utenti"
+                ],
+                "summary": "Rimuovi un account dal sistema",
+                "parameters": [
+                    {
+                        "name": "ID utente",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "idUtente": {
+                                    "$ref": "#/definitions/Utente/properties/id"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Utente rimosso dal sistema"
+                    },
+                    "400": {
+                        "description": "Richiesta non valida"
+                    },
+                    "404": {
+                        "description": "Utente non trovato"
+                    }
+                }
+            }
+        },
+        "/api/brano/{idBrano}": {
+            "get": {
+                "tags": [
+                    "Brani"
+                ],
+                "summary": "Ottieni un brano dal suo ID",
+                "parameters": [
+                    {
+                        "name": "idBrano",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Brano/properties/id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Brano trovato",
+                        "schema": {
+                            "$ref":"#/definitions/Brano"
+                        }
+                    },
+                    "400": {
+                        "description": "Richiesta non valida"
+                    },
+                    "404": {
+                        "description": "Brano non trovato"
+                    }
+                }
+            }
+        },
+        "/api/brano": {
+            "post": {
+                "tags": [
+                    "Brani"
+                ],
+                "summary": "Aggiungi un brano al sistema",
+                "parameters": [
+                    {
+                        "name": "Nuovo brano",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "nomeBrano": {
+                                    "$ref": "#/definitions/Brano/properties/nome"
+                                },
+                                "idUtente": {
+                                    "$ref": "#/definitions/Brano/properties/artista"
+                                },
+                                "durata": {
+                                    "type": "integer",
+                                    "minumum": 1,
+                                    "example": 1
+                                },
+                                "tags": {
+                                    "$ref": "#/definitions/Brano/properties/tags"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Brano aggiunto al sistema",
+                        "schema": {
+                            "$ref":"#/definitions/Brano"
+                        }
+                    },
+                    "400": {
+                        "description": "Richiesta non valida"
+                    },
+                    "404": {
+                        "description": "Artista non trovato"
+                    },
+                    "409": {
+                        "description": "Un brano con lo stesso nome è già presente"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Brani"
+                ],
+                "summary": "Modifica un brano presente nel sistema",
+                "parameters": [{
+                    "name": "Brano aggiornato",
+                    "in": "body",
+                    "required": true,
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "idBrano": {
+                                "$ref": "#/definitions/Brano/properties/id"
+                            },
+                            "nomeBrano": {
+                                "$ref": "#/definitions/Brano/properties/nome"
+                            },
+                            "tags": {
+                                "$ref": "#/definitions/Brano/properties/tags"
+                            }
+                        }
+                    }
+                }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Modifica effettuata"
+                    },
+                    "400": {
+                        "description": "Richiesta non valida"
+                    },
+                    "404": {
+                        "description": "Brano non trovato"
+                    },
+                    "409": {
+                        "description": "Un brano con lo stesso nome è già presente"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Brani"
+                ],
+                "summary": "Rimuovi un brano dal sistema",
+                "parameters": [
+                    {
+                        "name": "ID brano",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "idBrano": {
+                                    "$ref": "#/definitions/Brano/properties/id"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Brano rimosso dal sistema"
+                    },
+                    "400": {
+                        "description": "Richiesta non valida"
+                    },
+                    "404": {
+                        "description": "Brano non trovato"
+                    }
+                }
+            }
+        },
+        "/api/ricerca/{testo}": {
+            "get": {
+                "tags": [
+                    "Brani"
+                ],
+                "summary": "Ricerca un brano all'interno del sistema",
+                "parameters": [
+                    {
+                        "name": "testo",
+                        "in": "path",
+                        "required": "true",
+                        "schema": {
+                            "type": "string",
+                            "example": "Titolo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ricerca eseguita",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref":"#/definitions/Brano"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/preferiti/{idUtente}": {
+            "get": {
+                "tags": [
+                    "Preferiti"
+                ],
+                "summary": "Ottieni l'elenco dei preferiti di un utente dal suo ID",
+                "parameters": [
+                    {
+                        "name": "idUtente",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Preferiti/properties/utente"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista dei prefetiti trovata",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "idBrani": {
+                                    "$ref":"#/definitions/Preferiti/properties/listaBrani"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Richiesta non valida"
+                    },
+                    "404": {
+                        "description": "Utente non trovato"
+                    }
+                }
+            }
+        },
+        "/api/preferiti/modifica": {
+            "patch": {
+                "tags": [
+                    "Preferiti"
+                ],
+                "summary": "Aggiungi o rimuovi un brano dai preferiti di un utente",
+                "parameters": [
+                    {
+                        "name": "Preferiti",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "idUtente": {
+                                    "$ref": "#/definitions/Preferiti/properties/utente"
+                                },
+                                "idBrano": {
+                                    "$ref": "#/definitions/Brano/properties/id"
+                                },
+                                "azione": {
+                                    "type": "string",
+                                    "enum": ["aggiunta", "rimozione"],
+                                    "example": "aggiunta"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Modifica effettuata",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "idBrani": {
+                                    "$ref":"#/definitions/Preferiti/properties/listaBrani"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Richiesta non valida"
+                    },
+                    "404": {
+                        "description": "Utente/brano non trovato"
+                    },
+                    "409": {
+                        "description": "Azione non valida"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Utente": {
+            "type": "object",
+            "properties": {
+                "Name": {
+                    "type": "string",
+                    "example": "Mario"
+                },
+                "Surname": {
+                    "type": "string",
+                    "example": "Rossi"
+                },
+                "email": {
+                    "type": "string",
+                    "example" : "mariorossi@gmail.com"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "PasswordValida&"
+                },
+                "Is_tutor": {
+                    "type": "boolean",
+                    "example" : false
+                },
+                "universita_seguite" : {
+                    "type":"array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "Is_Admin" : {
+                    "type":"Boolean",
+                     "default" :false
+                    }
+            },
+            "required": [
+                "Name",
+                "Surname",
+                "email",
+                "password"
+            ]
+        },
+        "Universita": {
+            "type": "object",
+            "properties": {
+                "UniName": {
+                    "type": "string",
+                    "example": "Università degli studi di Trento"
+                },
+                "MIURcode": {
+                    "type": "number",
+                    "example": 70017
+                },
+                "Location": {
+                    "type": "string",
+                    "example": "Trento, Italia"
+                },
+                "DgCourse": {
+                    "type":"array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example" : ["Filosofia", "Informatica"]
+                },
+                "Tutor": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "uniqueItems": "true",
+                    "example": ["mariorossi@gmail.com", "pippobaudo@libero.it"]
+                }
+            },
+            "required": [
+                "UniName",
+                "MIURcode"
+            ]
+        },
+        "Chat": {
+            "type": "object",
+            "properties": {
+                "Sender": {
+                    "type": "string",
+                    "example": "mariorossi@gmail.com"
+                },
+                "Receiver": {
+                    "type": "string",
+                    "example": "pippobaudo@libero.it"
+                },
+                "Time": {
+                    "type": "Date"
+                },
+                "Text": {
+                    "type": "string",
+                    "example": "Ciao, mi chiamo Mario e vorrei venire a studiare all'Università degli Studi di Trento l'anno prossimo, cosa mi puoi dire sul corso di Economia?"
+                }
+            },
+            "required": [
+                "Sender",
+                "Receiver",
+                "Time",
+                "Text"
+            ]
+        }
+    }
+}
